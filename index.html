@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator</title>
+    <link rel="stylesheet" href="calculator.css" />
+  </head>
+  <body>
+    <h1>Calculator</h1>
+    <input type="text" id="display" readonly />
+    <div class="button-grid">
+      <button id="clear">C</button>
+      <button id="backspace">←</button>
+      <button id="divide">/</button>
+      <button id="multiply">*</button>
+      <button id="seven">7</button>
+      <button id="eight">8</button>
+      <button id="nine">9</button>
+      <button id="subtract">-</button>
+      <button id="four">4</button>
+      <button id="five">5</button>
+      <button id="six">6</button>
+      <button id="add">+</button>
+      <button id="one">1</button>
+      <button id="two">2</button>
+      <button id="three">3</button>
+      <button id="equals">=</button>
+      <button id="zero">0</button>
+      <button id="decimal">.</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+
+<script>
+  const display = document.getElementById("display");
+  const buttons = document.querySelectorAll("button");
+
+  let currentNumber = "";
+  let previousNumber = "";
+  let operator = "";
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      switch (button.id) {
+        case "clear":
+          currentNumber = "";
+          previousNumber = "";
+          operator = "";
+          display.value = "";
+          break;
+        case "backspace":
+          currentNumber = currentNumber.slice(0, -1);
+          display.value = currentNumber;
+          break;
+        case "divide":
+        case "multiply":
+        case "subtract":
+        case "add":
+          operator = button.id;
+          previousNumber = currentNumber;
+          currentNumber = "";
+          display.value = previousNumber + getOperatorSymbol(operator);
+          break;
+        case "equals":
+          if (previousNumber && operator) {
+            let result = calculate(previousNumber, currentNumber, operator);
+            // display.value = result;
+            currentNumber = result;
+            if (result == "2") {
+              display.value = "I LOVE YOU";
+            } else if (result == "4") {
+              display.value = "PAKANTOT";
+            } else {
+              display.value = result;
+            }
+            previousNumber = "";
+            operator = "";
+          }
+          break;
+        default:
+          currentNumber += button.textContent;
+          display.value = currentNumber;
+      }
+    });
+  });
+
+  function getOperatorSymbol(operator) {
+    switch (operator) {
+      case "divide":
+        return "/";
+      case "multiply":
+        return "*";
+      case "subtract":
+        return "-";
+      case "add":
+        return "+";
+    }
+  }
+
+  function calculate(a, b, operator) {
+    a = parseFloat(a);
+    b = parseFloat(b);
+    switch (operator) {
+      case "divide":
+        return a / b;
+      case "multiply":
+        return a * b;
+      case "subtract":
+        return a - b;
+      case "add":
+        return a + b;
+    }
+  }
+</script>
